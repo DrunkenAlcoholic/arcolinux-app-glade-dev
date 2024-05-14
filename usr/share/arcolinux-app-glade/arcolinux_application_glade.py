@@ -50,7 +50,7 @@ if not fn.path.exists(fn.log_dir):
 # https://docs.python.org/3/tutorial/classes.html
 # https://realpython.com/python-main-function/
 class Main:
-    choice = "arcolinuxl"
+    choice = "arconet"
     enabled_hold = False
 
     def __init__(self):
@@ -58,6 +58,7 @@ class Main:
         self.splash()
         self.setup_logging()
         self.back_ups()
+        self.cleanup()
         self.versioning()
         self.setup_gui()
 
@@ -129,6 +130,75 @@ class Main:
 
                 except Exception as error:
                     logging.error(error)
+
+    def cleanup(self):
+        # making sure /root is clean
+        # arconet
+        if fn.path.isdir("/root/arconet-build/"):
+            try:
+                fn.remove_dir(self, "/root/arconet-build/")
+                logging.info("Removing old builds")
+                logging.info("This may take a while - be patient")
+            except Exception as error:
+                logging.error(error)
+
+        if fn.path.isdir("/root/arconet-Out/"):
+            try:
+                fn.remove_dir(self, "/root/arconet-Out/")
+                logging.info("Removing old builds")
+                logging.info("This may take a while - be patient")
+            except Exception as error:
+                logging.error(error)
+
+        # arcopro
+        if fn.path.isdir("/root/arcopro-build/"):
+            try:
+                fn.remove_dir(self, "/root/arcopro-build/")
+                logging.info("Removing old builds")
+                logging.info("This may take a while - be patient")
+            except Exception as error:
+                logging.error(error)
+
+        if fn.path.isdir("/root/arcopro-Out/"):
+            try:
+                fn.remove_dir(self, "/root/arcopro-Out/")
+                logging.info("Removing old builds")
+                logging.info("This may take a while - be patient")
+            except Exception as error:
+                logging.error(error)
+
+        # arcoplasma
+        if fn.path.isdir("/root/arcoplasma-build/"):
+            try:
+                fn.remove_dir(self, "/root/arcoplasma-build/")
+                logging.info("Removing old builds")
+                logging.info("This may take a while - be patient")
+            except Exception as error:
+                logging.error(error)
+
+        if fn.path.isdir("/root/arcoplasma-Out/"):
+            try:
+                fn.remove_dir(self, "/root/arcoplasma-Out/")
+                logging.info("Removing old builds")
+                logging.info("This may take a while - be patient")
+            except Exception as error:
+                logging.error(error)
+
+        if fn.path.isdir("/root/Ariser-build/"):
+            try:
+                fn.remove_dir(self, "/root/Ariser-build/")
+                logging.info("Removing old builds")
+                logging.info("This may take a while - be patient")
+            except Exception as error:
+                logging.error(error)
+
+        if fn.path.isdir("/root/Ariser-Out/"):
+            try:
+                fn.remove_dir(self, "/root/Ariser-Out/")
+                logging.info("Removing old builds")
+                logging.info("This may take a while - be patient")
+            except Exception as error:
+                logging.error(error)
 
     def versioning(self):
         logging.info("App Started")
@@ -216,32 +286,30 @@ class Main:
 
         # making sure we start with a clean slate
         logging.info("Let's remove any old previous building folders")
-        fn.remove_dir(self, "/root/ArcoLinux-Out")
-        fn.remove_dir(self, "/root/ArcoLinuxB-Out")
-        fn.remove_dir(self, "/root/ArcoLinuxD-Out")
-        fn.remove_dir(self, "/root/arcolinux-build")
-        fn.remove_dir(self, "/root/arcolinuxd-build")
-        fn.remove_dir(self, "/root/arcolinuxb-build")
+        fn.remove_dir(self, "/root/arconet-Out")
+        fn.remove_dir(self, "/root/arcopro-Out")
+        fn.remove_dir(self, "/root/arcoplasma-Out")
 
         # git clone the iso scripts
-        if "b" in self.choice:
-            logging.info("Changing the B name")
-            self.choice = self.choice.replace("linuxb", "")
-            logging.info("Renaming done to :" + self.choice)
-            # B isos
-
+        if "arconet" in self.choice:
+            # https://github.com/arconetpro/arconet-iso
             command = (
-                "git clone https://github.com/arcolinuxb/"
-                + self.choice
+                "git clone https://github.com/arconetpro/arconet-iso"
                 + " /tmp/"
                 + self.choice
             )
-        else:
-            # core isos
+        if "arcopro" in self.choice:
+            # https://github.com/arconetpro/arcopro-iso
             command = (
-                "git clone https://github.com/arcolinux/"
+                "git clone https://github.com/arconetpro/arcopro-iso"
+                + " /tmp/"
                 + self.choice
-                + "-iso /tmp/"
+            )
+        if "arcoplasma" in self.choice:
+            # https://github.com/arconetpro/arcoplasma-iso
+            command = (
+                "git clone https://github.com/arconetpro/arcoplasma-iso"
+                + " /tmp/"
                 + self.choice
             )
         logging.info("git cloning the build folder")
@@ -251,7 +319,7 @@ class Main:
             logging.error(error)
 
         # launch the scripts
-        # /tmp/arcolinuxd/installation-scripts/40-build-the-iso-local-again.sh
+        # /tmp/arcopro/installation-scripts/40-build-the-iso-local-again.sh
         logging.info("Start building the iso in Alacritty")
         logging.info(
             "#################################################################"
@@ -297,18 +365,12 @@ class Main:
             logging.error(error)
 
         # change the output - foldername
-        if (
-            self.choice == "arcolinuxl"
-            or self.choice == "arcolinuxs"
-            or self.choice == "arcolinuxs-lts"
-            or self.choice == "arcolinuxs-zen"
-            or self.choice == "arcolinuxs-xanmod"
-        ):
-            dir = "ArcoLinux-Out"
-        elif self.choice == "arcolinuxd":
-            dir = "ArcoLinuxD-Out"
+        if self.choice == "arconet":
+            dir = "arconet-Out"
+        elif self.choice == "arcopro":
+            dir = "arcopro-Out"
         else:
-            dir = "ArcoLinuxB-Out"
+            dir = "arcoplasma-Out"
 
         # Moving the iso to home directory of the user
         path_dir = "/root/" + dir
@@ -379,6 +441,166 @@ class Main:
             "The creation of the Arch Linux iso is finished",
             False,
         )
+
+    def on_create_ariser_clicked(self, widget):
+        # Creation of the Ariser iso
+        logging.info("Ariser iso selected")
+
+        # installing archiso if needed
+        package = "archiso"
+        fn.install_package(self, package)
+
+        # making sure we start with a clean slate
+        logging.info("Let's remove any old previous building folders")
+        fn.remove_dir(self, "/root/Ariser-Out")
+        fn.remove_dir(self, "/root/Ariser-build")
+
+        # git clone the iso scripts
+        command = (
+            "git clone https://github.com/ariser-installer/ariser.git" + " /tmp/ariser"
+        )
+
+        logging.info("git cloning the build folder")
+        try:
+            fn.run_command(command)
+        except Exception as error:
+            logging.error(error)
+
+        # launch the scripts
+        logging.info("Start building the iso in Alacritty")
+        logging.info(
+            "#################################################################"
+        )
+        logging.info("Sometimes you have to try and build it a second time")
+        logging.info("for it to work because of servers and network connections")
+        logging.info(
+            "##################################################################"
+        )
+        logging.info("Changed to /tmp/ariser")
+        fn.os.chdir("/tmp/ariser")
+
+        # Preparing to launch the build
+        command = "/tmp/ariser/build-archlinux-with-alis.sh"
+
+        logging.info("Launching the building script")
+
+        # Checking whether switch is on
+        critty = "alacritty -e"
+
+        # Launching the build
+        try:
+            fn.subprocess.call(
+                critty + command,
+                shell=True,
+                stdout=fn.subprocess.PIPE,
+                stderr=fn.subprocess.STDOUT,
+            )
+        except Exception as error:
+            logging.error(error)
+
+        # change the output - foldername
+        dir = "Ariser-Out"
+
+        # Moving the iso to home directory of the user
+        path_dir = "/root/" + dir
+        destination = fn.home + "/" + dir
+        logging.info("Move folder to home directory")
+        try:
+            fn.shutil.copytree(path_dir, destination, dirs_exist_ok=True)
+
+            # Sending an in-app message
+            GLib.idle_add(
+                fn.show_in_app_notification,
+                self,
+                "The creation of the Ariser iso is finished",
+                False,
+            )
+        except Exception as error:
+            logging.error(error)
+
+        # changing permission
+        fn.permissions(destination)
+        logging.info("Check your home directory for the iso")
+
+    def on_create_sierra_clicked(self, widget):
+        # Creation of the Sierra iso
+        logging.info("Sierra iso selected")
+
+        # installing archiso if needed
+        package = "archiso"
+        fn.install_package(self, package)
+
+        # making sure we start with a clean slate
+        logging.info("Let's remove any old previous building folders")
+        fn.remove_dir(self, "/root/Sierra-Out")
+        fn.remove_dir(self, "/root/Sierra-build")
+
+        # git clone the iso scripts
+        command = (
+            "git clone https://github.com/ariser-installer/sierra.git" + " /tmp/sierra"
+        )
+
+        logging.info("git cloning the build folder")
+        try:
+            fn.run_command(command)
+        except Exception as error:
+            logging.error(error)
+
+        # launch the scripts
+        logging.info("Start building the iso in Alacritty")
+        logging.info(
+            "#################################################################"
+        )
+        logging.info("Sometimes you have to try and build it a second time")
+        logging.info("for it to work because of servers and network connections")
+        logging.info(
+            "##################################################################"
+        )
+        logging.info("Changed to /tmp/sierra")
+        fn.os.chdir("/tmp/sierra")
+
+        # Preparing to launch the build
+        command = "/tmp/sierra/build-archlinux-with-alis.sh"
+
+        logging.info("Launching the building script")
+
+        # Checking whether switch is on
+        critty = "alacritty -e"
+
+        # Launching the build
+        try:
+            fn.subprocess.call(
+                critty + command,
+                shell=True,
+                stdout=fn.subprocess.PIPE,
+                stderr=fn.subprocess.STDOUT,
+            )
+        except Exception as error:
+            logging.error(error)
+
+        # change the output - foldername
+        dir = "Sierra-Out"
+
+        # Moving the iso to home directory of the user
+        path_dir = "/root/" + dir
+        destination = fn.home + "/" + dir
+        logging.info("Move folder to home directory")
+        try:
+            fn.shutil.copytree(path_dir, destination, dirs_exist_ok=True)
+
+            # Sending an in-app message
+            GLib.idle_add(
+                fn.show_in_app_notification,
+                self,
+                "The creation of the Sierra iso is finished",
+                False,
+            )
+        except Exception as error:
+            logging.error(error)
+
+        # changing permission
+        fn.permissions(destination)
+        logging.info("Check your home directory for the iso")
 
     def on_clean_pacman_cache_clicked(self, widget):
         # Cleaning the /var/cache/pacman/pkg/
@@ -479,12 +701,12 @@ class Main:
         fn.install_package(self, package)
         fn.run_script(self, command)
         logging.info("We changed the content of your /etc/pacman.d/mirrorlist")
-        logging.info("Server = https://mirror.osbeck.com/archlinux/\$repo/os/\$arch")
-        logging.info("Server = http://mirror.osbeck.com/archlinux/\$repo/os/\$arch")
-        logging.info("Server = https://mirrors.kernel.org/archlinux/\$repo/os/\$arch")
-        logging.info("Server = https://geo.mirror.pkgbuild.com/\$repo/os/\$arch")
-        logging.info("Server = http://mirror.rackspace.com/archlinux/\$repo/os/\$arch")
-        logging.info("Server = https://mirror.rackspace.com/archlinux/\$repo/os/\$arch")
+        logging.info("Server = https://mirror.osbeck.com/archlinux/$repo/os/$arch")
+        logging.info("Server = http://mirror.osbeck.com/archlinux/$repo/os/$arch")
+        logging.info("Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch")
+        logging.info("Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch")
+        logging.info("Server = http://mirror.rackspace.com/archlinux/$repo/os/$arch")
+        logging.info("Server = https://mirror.rackspace.com/archlinux/$repo/os/$arch")
 
         logging.info("Done")
 
@@ -590,6 +812,26 @@ class Main:
             )
         else:
             logging.info("First select a file")
+
+    def on_asa_install_clicked(self, widget):
+        fn.install_arcolinux_spices_application(self)
+        # Sending an in-app message
+        GLib.idle_add(
+            fn.show_in_app_notification,
+            self,
+            "We have installed the ASA",
+            False,
+        )
+
+    def on_att_install_clicked(self, widget):
+        fn.install_archlinux_tweak_tool(self)
+        # Sending an in-app message
+        GLib.idle_add(
+            fn.show_in_app_notification,
+            self,
+            "We have installed the ATT",
+            False,
+        )
 
     def on_about_clicked(self, widget):
         # About dialog

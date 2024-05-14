@@ -58,6 +58,7 @@
                           <item translatable="yes">arcolinuxs-lts</item>
                           <item translatable="yes">arcolinuxs-zen</item>
                           <item translatable="yes">arcolinuxs-xanmod</item>
+                          <item translatable="yes">arcolinuxs-hardened</item>
                           <item translatable="yes">arcolinuxb-awesome</item>
                           <item translatable="yes">arcolinuxb-berry</item>
                           <item translatable="yes">arcolinuxb-bspwm</item>
@@ -86,6 +87,7 @@
                           <item translatable="yes">arcolinuxb-spectrwm</item>
                           <item translatable="yes">arcolinuxb-sway</item>
                           <item translatable="yes">arcolinuxb-ukui</item>
+                          <item translatable="yes">arcolinuxb-wayfire</item>
                           <item translatable="yes">arcolinuxb-wmderland</item>
                           <item translatable="yes">arcolinuxb-worm</item>
                           <item translatable="yes">arcolinuxb-xfce</item>
